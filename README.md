@@ -1,3 +1,41 @@
+# 通信使用byte数组
+```java
+    @Override
+    protected void initChannel(SocketChannel channel) throws Exception {
+        channel.pipeline().addLast("encoder", new ByteArrayEncoder());
+        channel.pipeline().addLast("decoder", new ByteArrayDecoder());
+        channel.pipeline().addLast(clientChannelHandler);
+    }
+```
+
+# 此处只展示连接包的组装
+```java
+        /**
+         * 连接数据转16进制数据
+         *
+         * @param cid           定义一个唯一不重复的值
+         * @param uidList       笔盒uid集合
+         */
+        public static byte[] connectionToHex(long cid, List<Long> uidList) {
+            StringBuilder stringBuilder = new StringBuilder();
+            //req
+            stringBuilder.append("00000001");
+            //cid
+            stringBuilder.append(String.format("%016x", cid));
+            // data_type
+            stringBuilder.append("0011");
+            // base_ts   固定 000001775B094836
+            stringBuilder.append("000001775B094836");
+            //uid_size
+            stringBuilder.append(String.format("%04x", uidList.size()));
+            //uid_s
+            for (Long uid : uidList) {
+                stringBuilder.append(String.format("%016x", uid));
+            }
+            return hexStringToByteArray(stringBuilder.toString().toUpperCase());
+        }
+```
+
 # 1.收到服务端发过来的包
 # 2.判断数据是否合法
 # 3.判断通信，根据协议中的每个不同包的命令进行判断
@@ -197,42 +235,4 @@
              */
             private Long force;
         }
-```
-
-# 此处只展示连接包的组装
-```java
-        /**
-         * 连接数据转16进制数据
-         *
-         * @param cid           定义一个唯一不重复的值
-         * @param uidList       笔盒uid集合
-         */
-        public static byte[] connectionToHex(long cid, List<Long> uidList) {
-            StringBuilder stringBuilder = new StringBuilder();
-            //req
-            stringBuilder.append("00000001");
-            //cid
-            stringBuilder.append(String.format("%016x", cid));
-            // data_type
-            stringBuilder.append("0011");
-            // base_ts   固定 000001775B094836
-            stringBuilder.append("000001775B094836");
-            //uid_size
-            stringBuilder.append(String.format("%04x", uidList.size()));
-            //uid_s
-            for (Long uid : uidList) {
-                stringBuilder.append(String.format("%016x", uid));
-            }
-            return hexStringToByteArray(stringBuilder.toString().toUpperCase());
-        }
-```
-
-# 通信使用byte数组
-```java
-    @Override
-    protected void initChannel(SocketChannel channel) throws Exception {
-        channel.pipeline().addLast("encoder", new ByteArrayEncoder());
-        channel.pipeline().addLast("decoder", new ByteArrayDecoder());
-        channel.pipeline().addLast(clientChannelHandler);
-    }
 ```
