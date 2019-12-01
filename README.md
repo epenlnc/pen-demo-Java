@@ -86,7 +86,7 @@
         return SendDotToDots.convert(sendDot, mac);
     }
 ```
-#转成点对象集合
+# 转成点对象集合
 ```java
     public static List<Dot> convert(SendDot sendDot, String mac) {
         List<Dot> dots = new ArrayList<>();
@@ -128,7 +128,7 @@
         private Long timestamp;
     }
 ```
-#点对象
+# 点对象
 ```java
         @Data
         public class Dot {
