@@ -30,8 +30,10 @@
         //包中的一个点
         String firstDot = currentData.substring(0, 42 + dataSize);
     }
-    服务端通信一次传过来的可能不止一个包，所以在解析完一个完整包以后，还需要判断是否此次通信还有数据，如果还有继续从第二步开始
+    
 ```
+**服务端通信一次传过来的可能不止一个包，所以在解析完一个完整包以后，还需要判断是否此次通信还有数据，如果还有继续从第二步开始**
+
 # 5.一个完整的点从包中取出来，继续进行下一步
 ```java
     /**
@@ -225,7 +227,7 @@
         }
 ```
 
-#通信使用byte数组
+# 通信使用byte数组
 ```java
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
